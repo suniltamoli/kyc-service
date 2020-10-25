@@ -13,7 +13,7 @@ import java.security.KeyException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/v1/carloan")
+@RequestMapping(value = "/v1/carloan/customer")
 public class KYCController {
 
     private final CustomerService customerService;
@@ -22,7 +22,7 @@ public class KYCController {
         this.customerService = customerService;
     }
 
-    @PostMapping("/customer/kyc")
+    @PostMapping("/kyc")
     public ResponseEntity<?> createCustomerKYC(@Valid @RequestBody CustomerDetails customerDetails) {
         try {
             customerService.saveCustomerData(customerDetails);
@@ -50,9 +50,15 @@ public class KYCController {
     }
 
 
-    @GetMapping("/kyc/{id}")
+    @GetMapping("/kyc/addressId/{id}")
     public CustomerDetails getCustomerByAddressProofId(@PathVariable(value = "id") String addressProofId) throws KeyException {
         CustomerDetails customerDetails =  customerService.getCustomerByAddressProofId(addressProofId);
+        return customerDetails;
+    }
+
+    @GetMapping("/kyc/{id}")
+    public CustomerDetails getCustomerByKYCNumber(@PathVariable(value = "id") String kycNumber) throws KeyException {
+        CustomerDetails customerDetails =  customerService.getCustomerByKYCNumber(kycNumber);
         return customerDetails;
     }
 

@@ -76,6 +76,53 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDetails;
     }
 
+    @Override
+    public CustomerDetails getCustomerByKYCNumber(String kycNumber) throws KeyException {
+        List<CustomerInfo> customerInfoList = customerRepository.getCustomerByKYCNumber(kycNumber);
+        CustomerDetails customerDetails = null;
+        CustomerInfo customerInfo = null;
+        if(!customerInfoList.isEmpty()) {
+            customerDetails = new CustomerDetails();
+            customerInfo= customerInfoList.get(0);
+            BeanUtils.copyProperties(customerInfo, customerDetails);
+            PersonalDetails personalDetails = new PersonalDetails();
+            personalDetails.setDob(customerInfo.getDob());
+            personalDetails.setFatherName(customerInfo.getFatherName());
+            personalDetails.setFirstName(customerInfo.getFirstName());
+            personalDetails.setGender(customerInfo.getGender().name());
+            personalDetails.setLastName(customerInfo.getLastName());
+            personalDetails.setMaritalStatus(customerInfo.getMaritalStatus().name());
+            personalDetails.setMiddleName(customerInfo.getMiddleName());
+            personalDetails.setMotherName(customerInfo.getMotherName());
+            personalDetails.setNationality(customerInfo.getNationality());
+            personalDetails.setOccupation(customerInfo.getOccupation().name());
+            personalDetails.setPhone(customerInfo.getPhone());
+            customerDetails.setPersonalDetails(personalDetails);
+            IdentityDetails identityDetails = new IdentityDetails();
+            identityDetails.setIdentityType(customerInfo.getIdentityType().name());
+            identityDetails.setIdentityNumber(customerInfo.getIdentityNumber());
+            customerDetails.setIdentityDetails(identityDetails);
+            customerDetails.setKyc_number(customerInfo.getKycNumber());
+            AddressDetails addressDetails = new AddressDetails();
+            addressDetails.setAddressProofId(customerInfo.getAddressProofId());
+            addressDetails.setProofOfAddress(customerInfo.getProofOfAddress().name());
+            addressDetails.setAddressType(customerInfo.getAddressType().name());
+            Address address = new Address();
+            address.setAddressLine1(customerInfo.getAddresse().getAddressLine1());
+            address.setAddressLine2(customerInfo.getAddresse().getAddressLine2());
+            address.setAddressLine3(customerInfo.getAddresse().getAddressLine3());
+            address.setCity(customerInfo.getAddresse().getCity());
+            address.setCountry(customerInfo.getAddresse().getCountry());
+            address.setDistrict(customerInfo.getAddresse().getDistrict());
+            address.setPostal(customerInfo.getAddresse().getPostal());
+            address.setState(customerInfo.getAddresse().getState());
+            addressDetails.setAddress(address);
+            customerDetails.setAddressDetails(addressDetails);
+        }
+
+        return customerDetails;
+    }
+
     private CustomerDetails getCustomerDetails( CustomerInfo customerInfo) {
         Address address = new Address();
         BeanUtils.copyProperties(customerInfo.getAddresse(), address);

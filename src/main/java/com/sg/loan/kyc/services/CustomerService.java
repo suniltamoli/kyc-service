@@ -11,4 +11,5 @@ public interface CustomerService {
     CustomerDetails updateCustomerData(CustomerDetails customerDetails) throws KeyException;
     List<CustomerDetails> getAllCustomerList() throws KeyException;
     CustomerDetails getCustomerByAddressProofId(String addressProofId) throws KeyException;
+    CustomerDetails getCustomerByKYCNumber(String kycNumber) throws KeyException;
 }
